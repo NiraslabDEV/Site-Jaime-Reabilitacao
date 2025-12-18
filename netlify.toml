@@ -1,0 +1,10 @@
+[build]
+  # Site estático - arquivos na raiz
+  publish = "."
+  command = ""
+
+# Redirecionamentos
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

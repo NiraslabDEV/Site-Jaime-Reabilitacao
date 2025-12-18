@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Funil interativo para montar seu plano personalizado de reabilitação e treino. Preço transparente e progressivo.">
+    <title>Monte Seu Plano | Funil Interativo</title>
+    <link rel="stylesheet" href="assets/css/jaime.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Reabilitação & Saúde</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/" class="nav-link">Início</a></li>
+                    <li><a href="/reabilitacao.html" class="nav-link">Reabilitação</a></li>
+                    <li><a href="/idosos.html" class="nav-link">Idosos</a></li>
+                    <li><a href="/atletas.html" class="nav-link">Atletas</a></li>
+                    <li><a href="/planos.html" class="nav-link">Planos</a></li>
+                    <li><a href="/funil.html" class="nav-link">Começar</a></li>
+                </ul>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="funil-container">
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 11%;"></div>
+        </div>
+
+        <!-- PASSO 1: OBJETIVO PRINCIPAL -->
+        <div class="funil-step active" id="step1">
+            <div class="step-card">
+                <h2 class="step-title">PASSO 1</h2>
+                <p class="step-question">Qual é o seu principal objetivo hoje?</p>
+                <div class="step-options">
+                    <div class="option-card" data-value="reabilitacao">
+                        <div class="option-title">Reabilitação / Dor</div>
+                        <div class="option-description">Estou com dores ou preciso de reabilitação</div>
+                    </div>
+                    <div class="option-card" data-value="idosos">
+                        <div class="option-title">Saúde e Autonomia (Idosos)</div>
+                        <div class="option-description">Quero saúde, equilíbrio e autonomia</div>
+                    </div>
+                    <div class="option-card" data-value="atletas">
+                        <div class="option-title">Performance Esportiva (Atletas)</div>
+                        <div class="option-description">Sou atleta e quero treinar com segurança</div>
+                    </div>
+                </div>
+                <p class="microcopy" style="margin-top: var(--spacing-md); text-align: center;">
+                    O plano será personalizado com base na sua escolha
+                </p>
+            </div>
+        </div>
+
+        <!-- PASSO 2: AVALIAÇÃO -->
+        <div class="funil-step" id="step2">
+            <div class="step-card">
+                <h2 class="step-title">PASSO 2</h2>
+                <p class="step-question">Avaliação Funcional Individual</p>
+                <div class="card" style="background: rgba(0, 255, 136, 0.1); border-color: var(--verde-fluorescente); margin-bottom: var(--spacing-md);">
+                    <p class="card-text">
+                        Todo acompanhamento começa com uma avaliação funcional individual.
+                    </p>
+                    <ul class="card-list" style="margin-top: var(--spacing-md);">
+                        <li>Avaliação física</li>
+                        <li>Mobilidade</li>
+                        <li>Postura</li>
+                        <li>Bioimpedância</li>
+                    </ul>
+                    <div class="option-price" style="text-align: center; margin-top: var(--spacing-md);">
+                        700 MT (obrigatória)
+                    </div>
+                </div>
+                <p class="microcopy" style="text-align: center; margin-top: var(--spacing-md);">
+                    Esta avaliação é a base científica para um plano realmente personalizado
+                </p>
+                <div style="text-align: center; margin-top: var(--spacing-lg);">
+                    <button class="btn btn-primary" onclick="avancarPasso()">
+                        Continuar →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PASSO 3: FREQUÊNCIA -->
+        <div class="funil-step" id="step3">
+            <div class="step-card">
+                <h2 class="step-title">PASSO 3</h2>
+                <p class="step-question">Quantas sessões por semana você deseja?</p>
+                <div class="step-options">
+                    <div class="option-card" data-value="1" data-price="2500">
+                        <div class="option-title">1x por semana</div>
+                        <div class="option-price">2.500 MT/mês</div>
+                        <div class="option-description">Atendimento domiciliar | Plano mensal</div>
+                    </div>
+                    <div class="option-card" data-value="2" data-price="5000">
+                        <div class="option-title">2x por semana</div>
+                        <div class="option-price">5.000 MT/mês</div>
+                        <div class="option-description">Atendimento domiciliar | Plano mensal</div>
+                    </div>
+                    <div class="option-card" data-value="3" data-price="8000">
+                        <div class="option-title">3x por semana</div>
+                        <div class="option-price">8.000 MT/mês</div>
+                        <div class="option-description">Atendimento domiciliar | Plano mensal</div>
+                    </div>
+                    <div class="option-card" data-value="5" data-price="10000">
+                        <div class="option-title">5x por semana</div>
+                        <div class="option-price">10.000 MT/mês</div>
+                        <div class="option-description">Atendimento domiciliar | Plano mensal</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PASSO 4: MODALIDADE -->
+        <div class="funil-step" id="step4">
+            <div class="step-card">
+                <h2 class="step-title">PASSO 4</h2>
+                <p class="step-question">Como você prefere o acompanhamento?</p>
+                <div class="step-options">
+                    <div class="option-card" data-value="presencial">
+                        <div class="option-title">Presencial Domiciliar</div>
+                        <div class="option-description">Incluído no plano</div>
+                    </div>
+                    <div class="option-card" data-value="hibrido" data-price="1500">
+                        <div class="option-title">Híbrido (Presencial + Vídeos)</div>
+                        <div class="option-price">+1.500 MT/mês</div>
+                        <div class="option-description">
+                            Vídeos gravados pelo profissional<br>
+                            Continuidade mesmo fora das sessões<br>
+                            Maior evolução
+                        </div>
+                        <div class="option-badge">UPSELL #1</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PASSO 5: FOCO ESPECÍFICO -->
+        <div class="funil-step" id="step5">
+            <div class="step-card">
+                <h2 class="step-title">PASSO 5</h2>
+                <p class="step-question">Você quer foco especial em alguma necessidade?</p>
+                <div class="step-options">
+                    <div class="option-card" data-value="nao">
+                        <div class="option-title">Não</div>
+                    </div>
+                    <div class="option-card" data-value="sim" data-price="1000">
+                        <div class="option-title">Sim, foco específico</div>
+                        <div class="option-description">
+                            Dor lombar / joelho / ombro<br>
+                            Equilíbrio e prevenção de quedas<br>
+                            Performance esportiva específica
+                        </div>
+                        <div class="option-price">+1.000 MT/mês</div>
+                        <div class="option-badge">UPSELL #2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PASSO 6: ACOMPANHAMENTO EXTRA -->
+        <div class="funil-step" id="step6">
+            <div class="step-card">
+                <h2 class="step-title">PASSO 6</h2>
+                <p class="step-question">Deseja acompanhamento contínuo fora das sessões?</p>
+                <div class="step-options">
+                    <div class="option-card" data-value="nao">
+                        <div class="option-title">Não</div>
+                    </div>
+                    <div class="option-card" data-value="sim" data-price="800">
+                        <div class="option-title">Sim, suporte contínuo</div>
+                        <div class="option-description">
+                            Ajustes de treino via WhatsApp<br>
+                            Dúvidas rápidas<br>
+                            Correções básicas
+                        </div>
+                        <div class="option-price">+800 MT/mês</div>
+                        <div class="option-badge">UPSELL #3</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PASSO 7: RESUMO FINAL -->
+        <div class="funil-step" id="step7">
+            <div class="step-card">
+                <h2 class="step-title">PASSO 7</h2>
+                <p class="step-question">Resumo do seu plano</p>
+                <div class="resumo-final" id="resumoFinal">
+                    <!-- Será preenchido via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- PASSO 8: DADOS DO CLIENTE -->
+        <div class="funil-step" id="step8">
+            <div class="step-card">
+                <h2 class="step-title">PASSO 8</h2>
+                <p class="step-question">Seus dados para contato</p>
+                <form id="formDados">
+                    <div class="form-group">
+                        <label class="form-label" for="nome">Nome completo</label>
+                        <input type="text" class="form-input" id="nome" name="nome" required placeholder="Seu nome">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="whatsapp">WhatsApp</label>
+                        <input type="tel" class="form-input" id="whatsapp" name="whatsapp" required placeholder="84XXXXXXXX ou 82XXXXXXXX">
+                        <small style="color: var(--text-muted); font-size: 0.85rem; display: block; margin-top: var(--spacing-xs);">
+                            Digite apenas os 9 dígitos (sem o 258)
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bairro">Bairro</label>
+                        <input type="text" class="form-input" id="bairro" name="bairro" required placeholder="Seu bairro em Maputo">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- PASSO 9: CONFIRMAÇÃO -->
+        <div class="funil-step" id="step9">
+            <div class="step-card">
+                <h2 class="step-title">PASSO 9</h2>
+                <p class="step-question">Pronto! Seu pedido será enviado para o WhatsApp</p>
+                <div class="card" style="text-align: center; padding: var(--spacing-xl);">
+                    <p class="card-text" style="font-size: 1.2rem; margin-bottom: var(--spacing-lg);">
+                        ✅ Seu pedido foi montado com sucesso!
+                    </p>
+                    <p class="card-text" style="color: var(--text-muted);">
+                        Você será redirecionado para o WhatsApp em instantes...
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Parcial (sempre visível) -->
+        <div class="total-parcial" id="totalParcial" style="display: none;">
+            <div class="total-label">Total mensal estimado:</div>
+            <div class="total-value" id="totalValue">0 MT</div>
+        </div>
+
+        <!-- Navegação -->
+        <div class="funil-navigation" id="funilNavigation" style="display: none;">
+            <button class="btn btn-secondary btn-nav" id="btnVoltar">← Voltar</button>
+            <button class="btn btn-primary btn-nav" id="btnAvancar">Avançar →</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">&copy; 2025 Reabilitação & Saúde. Atendimento autônomo e personalizado.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/funil.js"></script>
+</body>
+</html>
+

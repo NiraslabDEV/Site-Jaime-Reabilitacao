@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Frontend - API de Pagamento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #fff;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #3b82f6;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .test-section h2 {
+            color: #60a5fa;
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #059669;
+            transform: scale(1.02);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #0f172a;
+            border-left: 4px solid #10b981;
+        }
+        
+        .result.error {
+            border-left-color: #ef4444;
+        }
+        
+        .result pre {
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .status.success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .status.error {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .status.pending {
+            background: #f59e0b;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste Frontend - API de Pagamento M-Pesa</h1>
+        
+        <div class="test-section">
+            <h2>1. Teste de Conectividade</h2>
+            <button onclick="testHealth()">Testar Servidor</button>
+            <div id="healthResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. Processar Pagamento</h2>
+            <form id="paymentForm" onsubmit="processPayment(event)">
+                <div class="form-group">
+                    <label>Valor (MTZ)</label>
+                    <input type="number" id="amount" value="450.00" step="0.01" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Número de Telefone (9 dígitos)</label>
+                    <input type="tel" id="phoneNumber" value="841234567" pattern="[0-9]{9}" maxlength="9" required>
+                    <small style="color: #94a3b8; font-size: 0.85rem;">Ex: 841234567 (sem o 258)</small>
+                </div>
+                <div class="form-group">
+                    <label>Referência do Pedido</label>
+                    <input type="text" id="orderReference" value="TEST-FRONTEND" required>
+                </div>
+                <button type="submit">Processar Pagamento</button>
+            </form>
+            <div id="paymentResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. Consultar Status</h2>
+            <div class="form-group">
+                <label>Transaction ID</label>
+                <input type="text" id="transactionId" placeholder="TXN-XXXXXXXX">
+            </div>
+            <button onclick="checkStatus()">Consultar Status</button>
+            <div id="statusResult"></div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE_URL = 'http://localhost:8000';
+        
+        async function testHealth() {
+            const resultDiv = document.getElementById('healthResult');
+            resultDiv.innerHTML = '<p>Testando...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            <span class="status success">✓ Servidor Online</span>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(`Status: ${response.status}`);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <span class="status error">✗ Erro</span>
+                        <p>${error.message}</p>
+                        <p style="margin-top: 10px; color: #94a3b8;">
+                            Certifique-se de que o servidor está rodando:<br>
+                            <code>uvicorn app.main:app --reload --host 0.0.0.0 --port 8000</code>
+                        </p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function processPayment(event) {
+            event.preventDefault();
+            
+            const resultDiv = document.getElementById('paymentResult');
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            
+            resultDiv.innerHTML = '<p>Processando...</p>';
+            submitBtn.disabled = true;
+            
+            const paymentData = {
+                amount: parseFloat(document.getElementById('amount').value),
+                phone_number: document.getElementById('phoneNumber').value,
+                order_reference: document.getElementById('orderReference').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/payment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(paymentData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            <span class="status success">✓ Pagamento Iniciado</span>
+                            <p style="margin-top: 10px;"><strong>Transaction ID:</strong> ${data.transaction_id}</p>
+                            <p><strong>Status:</strong> <span class="status pending">${data.status}</span></p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                    
+                    // Preencher transaction ID para consulta
+                    document.getElementById('transactionId').value = data.transaction_id;
+                } else {
+                    throw new Error(data.detail || 'Erro ao processar pagamento');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <span class="status error">✗ Erro</span>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+        
+        async function checkStatus() {
+            const transactionId = document.getElementById('transactionId').value;
+            const resultDiv = document.getElementById('statusResult');
+            
+            if (!transactionId) {
+                resultDiv.innerHTML = '<div class="result error"><p>Por favor, insira um Transaction ID</p></div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<p>Consultando...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/payment/status/${transactionId}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const statusClass = data.status === 'success' ? 'success' : 
+                                      data.status === 'failed' ? 'error' : 'pending';
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            <span class="status ${statusClass}">${data.status.toUpperCase()}</span>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(data.detail || 'Erro ao consultar status');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <span class="status error">✗ Erro</span>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Testar conectividade ao carregar
+        window.addEventListener('load', () => {
+            testHealth();
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+

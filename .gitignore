@@ -1,10 +1,16 @@
-# Ignorar tudo exceto a pasta site-jaime
+# Ignorar tudo exceto arquivos do site na raiz
 /*
 !.gitignore
-!site-jaime/
+!index.html
+!*.html
+!netlify.toml
+!_redirects
+!package.json
+!assets/
+!*.md
 
-# Dentro de site-jaime, manter tudo
-!site-jaime/**
+# Dentro de assets, manter tudo
+!assets/**
 
 # Python
 __pycache__/
@@ -27,3 +33,14 @@ npm-debug.log*
 # Arquivos temporários
 *.tmp
 .cache/
+
+# Backend (não incluir)
+app/
+requirements.txt
+Dockerfile
+.dockerignore
+
+# Arquivos de teste
+test_*.py
+*_test.py
+*.ps1
