@@ -1,6 +1,8 @@
 [build]
   # Site estático - não precisa de build
-  publish = "."
+  # Como os arquivos estão em site-jaime/, configurar base directory
+  base = "site-jaime"
+  publish = "site-jaime"
   # Não executar nenhum comando de build
   command = ""
 

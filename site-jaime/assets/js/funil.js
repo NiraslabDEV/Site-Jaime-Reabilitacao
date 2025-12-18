@@ -161,7 +161,10 @@ window.avancarPasso = function() {
 
         // Ações específicas por passo
         if (passoAtual === 7) {
-            gerarResumoFinal();
+            // Pequeno delay para garantir que o DOM está pronto
+            setTimeout(() => {
+                gerarResumoFinal();
+            }, 100);
         } else if (passoAtual === 9) {
             enviarWhatsApp();
         }
@@ -330,7 +333,22 @@ function atualizarProgresso() {
 
 function gerarResumoFinal() {
     const resumoFinal = document.getElementById('resumoFinal');
-    if (!resumoFinal) return;
+    if (!resumoFinal) {
+        console.error('Elemento resumoFinal não encontrado!');
+        return;
+    }
+
+    // Garantir que formatarPreco está disponível
+    if (typeof formatarPreco === 'undefined') {
+        console.error('Função formatarPreco não está definida!');
+        // Definir função de fallback
+        window.formatarPreco = function(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(valor || 0) + ' MT';
+        };
+    }
 
     const objetivoTexto = {
         'reabilitacao': 'Reabilitação / Dor',
@@ -350,14 +368,22 @@ function gerarResumoFinal() {
         'hibrido': 'Híbrido (Presencial + Vídeos)'
     };
 
+    // Recalcular total antes de exibir
     calcularTotal();
+
+    // Garantir valores padrão
+    const objetivo = objetivoTexto[estadoFunil.objetivo] || 'Não informado';
+    const frequencia = frequenciaTexto[estadoFunil.frequencia] || 'Não selecionado';
+    const frequenciaValor = estadoFunil.frequenciaValor || 0;
+    const modalidade = modalidadeTexto[estadoFunil.modalidade] || 'Não selecionado';
+    const total = estadoFunil.total || 700;
 
     resumoFinal.innerHTML = `
         <h3 class="resumo-title">Resumo do Seu Plano</h3>
         
         <div class="resumo-item">
             <span class="resumo-item-label">Objetivo:</span>
-            <span class="resumo-item-value">${objetivoTexto[estadoFunil.objetivo] || 'Não informado'}</span>
+            <span class="resumo-item-value">${objetivo}</span>
         </div>
 
         <div class="resumo-item">
@@ -367,12 +393,12 @@ function gerarResumoFinal() {
 
         <div class="resumo-item">
             <span class="resumo-item-label">Plano:</span>
-            <span class="resumo-item-value">${frequenciaTexto[estadoFunil.frequencia] || 'Não selecionado'} - ${formatarPreco(estadoFunil.frequenciaValor)}/mês</span>
+            <span class="resumo-item-value">${frequencia} - ${formatarPreco(frequenciaValor)}/mês</span>
         </div>
 
         <div class="resumo-item">
             <span class="resumo-item-label">Modalidade:</span>
-            <span class="resumo-item-value">${modalidadeTexto[estadoFunil.modalidade] || 'Não selecionado'}</span>
+            <span class="resumo-item-value">${modalidade}</span>
         </div>
 
         ${estadoFunil.hibrido ? `
@@ -398,9 +424,20 @@ function gerarResumoFinal() {
 
         <div class="resumo-total">
             <span class="resumo-total-label">Total mensal estimado:</span>
-            <span class="resumo-total-value">${formatarPreco(estadoFunil.total)}</span>
+            <span class="resumo-total-value">${formatarPreco(total)}</span>
         </div>
     `;
+
+    console.log('Resumo gerado com sucesso!', {
+        objetivo: estadoFunil.objetivo,
+        frequencia: estadoFunil.frequencia,
+        frequenciaValor: estadoFunil.frequenciaValor,
+        modalidade: estadoFunil.modalidade,
+        hibrido: estadoFunil.hibrido,
+        focoEspecifico: estadoFunil.focoEspecifico,
+        suporteExtra: estadoFunil.suporteExtra,
+        total: estadoFunil.total
+    });
 }
 
 // ============================================
