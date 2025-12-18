@@ -1,16 +1,24 @@
-# Dependências
-node_modules/
-package-lock.json
+# Ignorar tudo exceto a pasta site-jaime
+/*
+!.gitignore
+!site-jaime/
 
-# Arquivos de sistema
-.DS_Store
-Thumbs.db
+# Dentro de site-jaime, manter tudo
+!site-jaime/**
 
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Arquivos de ambiente
+.env
+.env.local
 
 # Logs
 *.log
@@ -19,4 +27,3 @@ npm-debug.log*
 # Arquivos temporários
 *.tmp
 .cache/
-
