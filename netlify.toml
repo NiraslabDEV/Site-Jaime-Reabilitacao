@@ -1,0 +1,14 @@
+[build]
+  # Como é um site estático, não precisa de build
+  publish = "."
+
+[[redirects]]
+  # Redirecionar todas as rotas para index.html (SPA-like behavior)
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  # Variáveis de ambiente (se necessário no futuro)
+  NODE_VERSION = "18"
+
